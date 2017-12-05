@@ -1,0 +1,14 @@
+AllCops:
+  Include:
+    - '**/Rakefile'
+    - '**/config.ru'
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+  TargetRubyVersion: 2.4
+
+Style/Documentation:
+  Enabled: false
+Metrics/LineLength:
+  Max: 120
