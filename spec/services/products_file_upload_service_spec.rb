@@ -33,4 +33,25 @@ RSpec.describe ProductsFileUploadService do
       FileUtils.rm("#{ProductsFileUploadService::STORE}/#{@file_name}")
     end
   end
+
+  context 'CSV processing' do
+    before do
+      Spree::StockLocation.create!(name: 'Test Location', default: true)
+      FileUtils.cp('sample.csv', 'tmp/sample.csv')
+      @csv_loader = ProductsFileUploadService::CsvLoader.new('sample.csv')
+      @csv_loader.process
+    end
+
+    it 'saves products' do
+      expect(Spree::Product.count).not_to eq(0)
+    end
+
+    it 'skips empty or not filled lines' do
+      expect(Spree::Product.count).to eq(3)
+    end
+
+    it 'interprets prices correctly' do
+      expect(Spree::Product.first.price.to_f).to eq(22.99)
+    end
+  end
 end
